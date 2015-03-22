@@ -1,6 +1,6 @@
 <?php
 /**
- Plugin Name: TargetingMantra Recommendations Suite
+ Plugin Name: TargetingMantra Recommendations Suite for WooCommerce
  Plugin URI: http://www.woothemes.com/products/targetingMantra-recommendations/
  Description: Get recommendations for your store - Cross-sell, Up-sell & get higher conversion from targetingMantra's 17 widgets
  Author: TargetingMantra
