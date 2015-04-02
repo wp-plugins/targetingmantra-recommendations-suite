@@ -22,10 +22,10 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 			$response = new WP_Ajax_Response;
 			if($this->_helper->checkAuth()) {
 				// post-type : retrieve all posts of type product.
-				// posta_per_page : set to -1 to retrieve all the products.
 				$args = array(
 					'post_type' => 'product',
-					'posts_per_page' => '-1'
+					'posts_per_page' => $this->_helper->getPageLimit(),
+					'paged'         => $this->_helper->getPage(),
 				);
 				$loop = new WP_Query( $args );
 				while ( $loop->have_posts() ) {

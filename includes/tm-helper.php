@@ -109,6 +109,25 @@ if( !class_exists('TM_Helper')) {
 		}
 		
 		/**
+		 * Get page limit
+		 * 
+		 * @return int
+		 */
+		public function getPageLimit() {
+			return $_POST['pageLimit'];
+		}
+		
+		/**
+		 * Get page number
+		 *
+		 * @return int
+		 */
+		public function getPage()
+		{
+			return $_POST['pageNum'];
+		}
+		
+		/**
 		 * Get the mid of the store.
 		 * @return string
 		 */
