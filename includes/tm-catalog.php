@@ -26,6 +26,7 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 					'post_type' => 'product',
 					'posts_per_page' => $this->_helper->getPageLimit(),
 					'paged'         => $this->_helper->getPage(),
+					'post_status' => 'publish',
 				);
 				$loop = new WP_Query( $args );
 				while ( $loop->have_posts() ) {
@@ -44,21 +45,23 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 		private function extract_product_data( $product ) {
 			$postdata = $product->get_post_data();	
 			$subCategory = $this->get_subCategory($product->id);
-			$store = $this->get_category_tree($subCategory)[0];
+			$category_tree = $this->get_category_tree($subCategory);
+			$store = $category_tree[0];
+			$product_name = get_the_title($product->id);
 			$product_data = array(
 				'product_id'        => $product->id,
-				'product_name'      => $postdata->post_name,
+				'product_name'      => $product_name,
 				'parent_id'         => $this->get_parent($product),
 				'content'           => $postdata->post_content,
-				'title'	            => $product->get_title(),
+				'title'	            => $product_name,
 				'regular_price' 	=> floatval( $product->regular_price ),
 				'sale_price'		=> $this->get_salePrice($product),
 				'product_type'      => $product->product_type,
 				'creation_date_gmt' => $postdata->post_date_gmt,
-				'product_cat'		=> wp_get_object_terms( $product->id, 'product_cat', array( 'fields' => 'names' ))[0],
+				'product_cat'		=> $this->get_cat_name( $subCategory ),
 				'product_cat_id'	=> $subCategory,
 				'product_tag_ids'	=> implode( ' , ', wp_get_object_terms( $product->id, 'product_tag', array( 'fields' => 'ids' ) ) ),
-				'categories'        => implode('>', $this->get_category_tree($subCategory)),
+				'categories'        => implode('>', $category_tree),
 				'custom_attributes' => $this->get_custom_attributes($product),
 				'store'  			=> $store,
 				'sku'               => $product->get_sku(),
@@ -135,7 +138,14 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 		 * @param integer $productId
 		 */
 		private function get_subCategory ( $productId ) {
-			return wp_get_object_terms( $productId, 'product_cat', array( 'fields' => 'ids' ) )[0];
+			$product_cat_id = wp_get_object_terms( $productId, 'product_cat', array( 'fields' => 'ids' ) );
+			$parents = array();
+			foreach($product_cat_id as $catId) {
+				$parents = array_merge($parents, get_ancestors( $catId , 'product_cat' ));
+			}		
+			$lowest_level_product_cat_id = array_diff($product_cat_id,  $parents);
+			$single_lowest_product_catId = array_slice($lowest_level_product_cat_id, 0, 1);
+			return $single_lowest_product_catId[0];
 		}
 		
 		/**
@@ -156,9 +166,11 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 		 */
 		private function get_product_image( $product ) {
 			if( has_post_thumbnail( $product->id ) ) {
-				return $this->get_thumbnail_image($product->id)[0];
+				$image = $this->get_thumbnail_image($product->id);
+				return $image[0];
 			} else {
-				return $this->get_gallery_images($product)[0];
+				$image = $this->get_gallery_images($product);
+				return $image[0];
 			}
 		}
 		

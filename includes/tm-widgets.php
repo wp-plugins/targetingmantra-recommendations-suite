@@ -46,8 +46,8 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 						"pp-rvi"
 				),
 				"categoryPage" => array (
-						"cp-bs",
 						"cp-na",
+						"cp-bs",
 						"cp-cr"
 				),
 				"cartPage" => array (
@@ -68,6 +68,7 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 			$this->_helper = $helper;
 			add_action('wp_head',array( $this, 'loadTargetingMantraScript' ));
 			add_action('wp_head',array($this, 'setParams'));
+			add_shortcode( 'targetingMantraWidget', array($this, 'generateWidgetsForShortcode') );
 		}
 		
 		/**
@@ -77,7 +78,7 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 			?>
 			<script type="text/javascript">
 			//<![CDATA[
-				document.write(unescape("%3Cscript type=\"text/javascript\" src=\"http://d1gsqroy9pf3oi.cloudfront.net/javascripts/tm-javascript.min.js\" charset=\"utf-8\" %3E%3C/script%3E"));
+				document.write(unescape("%3Cscript type=\"text/javascript\" src=\"http://d1gsqroy9pf3oi.cloudfront.net/javascripts/tm-javascript-v2.min.js\" charset=\"utf-8\" %3E%3C/script%3E"));
 			//]]>
 			</script>
 			<?php
@@ -98,13 +99,13 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 			$pageInfo = $this->getPageInfo();
 			switch ($pageInfo) {
 				case 'homePage' :
-					add_action('woocommerce_after_main_content',array($this, 'generateWidgets'));
+					add_action('woocommerce_before_main_content',array($this, 'generateWidgets'));
 					break;
 				case 'categoryPage':
-					add_action('woocommerce_after_main_content',array($this, 'setCategoryWidgetParams'),90);
+					add_action('woocommerce_before_main_content',array($this, 'setCategoryWidgetParams'),10);
 					break;
 				case 'productPage':
-					add_action('woocommerce_after_main_content',array($this, 'setProductWidgetParams'),90);
+					add_action('woocommerce_sidebar',array($this, 'setProductWidgetParams'),10);
 					break;
 				case 'cartPage':
 					add_action('woocommerce_after_cart',array( $this, 'setCartWidgetParams' ));
@@ -123,13 +124,26 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 			?>
 			<script type="text/javascript">
 			//<![CDATA[
-			TMJS.init( <?php echo $this->getMid() ?>,'na');
+			TMJS.init({'mid':<?php echo $this->getMid() ?>,'domain':'na'});
 			TMJS.generateWidgets(<?php echo json_encode($this->_widgetParametersData)?> );
 			//]]>
 			</script>
 			<?php 
+			return;
 		}
 		
+		public function generateWidgetsForShortcode() {
+			$div = $this->insertEmptyDivForShortcode();
+			?>
+			<script type="text/javascript">
+			//<![CDATA[
+			TMJS.init({'mid':<?php echo $this->getMid() ?>,'domain':'na'});
+			TMJS.generateWidgets(<?php echo json_encode($this->_widgetParametersData)?> );
+			//]]>
+			</script>
+			<?php 
+			return $div;
+		}
 
 		/**
 		 * create the widget call for product page after main content is loaded
@@ -146,7 +160,7 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 		public function setCategoryWidgetParams() {
 			$cat_name = single_cat_title( '', false );
 			$term = get_term_by('name', $cat_name, 'product_cat');
-			$cat_id = $term->term_id;
+			$cat_id = $this->_helper->getChildProducts($term->term_id);
 			$this->insertParam ( 'catid', $cat_id );
 			$this->generateWidgets();
 		}
@@ -193,7 +207,7 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 		 */
 		private function getPageInfo() {
 			$pageInfo;
-			if (is_shop() || is_home()) {
+			if (is_shop() || is_home() || is_front_page()) {
 				$pageInfo = 'homePage';
 			} elseif (is_product()) {
 				$pageInfo = 'productPage';
@@ -237,6 +251,21 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 				foreach ( $widgetsEnabled as $widgetIndex => $widgetType ) {
 					echo "<div id=tm-$widgetType></div>";
 				}
+			}
+		}
+
+		/**
+		 * insert targetingMantra divs based on page type
+		 */
+		private function insertEmptyDivForShortcode() {
+			if ($this->isPageWidgetsEnabled ()) {
+				$widgetsEnabled = $this->getWidgetTypes ();
+				$pageId = $this->getPageId ();
+				$div = "";
+				foreach ( $widgetsEnabled as $widgetIndex => $widgetType ) {
+					$div .= "<div id=tm-$widgetType></div>";
+				}
+				return $div;
 			}
 		}
 		

@@ -170,6 +170,26 @@ if( !class_exists('TM_Helper')) {
 		}
 		
 		/**
+		 * get the child catId of current category id
+		 * @return array
+		 */
+		public function getChildProducts($catId) {
+			$subCatId = $catId;
+			$args = array(
+				'hierarchical' => 1,
+				'show_option_none' => '',
+				'hide_empty' => 0,
+				'parent' => $catId,
+				'taxonomy' => 'product_cat'
+			);
+			$subcats = get_categories($args);
+			foreach ($subcats as $sc) {
+				$subCatId = $subCatId.','.$this->getChildProducts($sc->term_id);			
+			}
+			return $subCatId;
+		}
+		
+		/**
 		 * Sets the option to enable targeting mantra pixel integration.
 		 */
 		private function enablePixelIntegration() {

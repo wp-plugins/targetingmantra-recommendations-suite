@@ -96,7 +96,7 @@ if ( ! class_exists( 'Targetingmantra_Tracking' ) ) {
 		 */
 		private function getPageInfo() {
 			$pageInfo;
-			if (is_shop() || is_home()) {
+			if (is_shop() || is_home() || is_front_page()) {
 				$pageInfo = 'homePage';
 			} elseif (is_product()) {
 				$pageInfo = 'productPage';

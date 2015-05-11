@@ -56,9 +56,9 @@ if ( ! class_exists( 'TM_Settings' ) ) {
 						'id' => 'woocommerce_tm_widgets_enable'		
 				),
 				array(
-						'title' => __( 'Number of widgtes to be displayed', 'wc-targetingMantra' ),
-						'name' => __( 'Number of widgtes to be displayed', 'wc-targetingMantra' ),
-						'desc' => __( 'Enter the number of widgets to be displayed' ),
+						'title' => __( 'Number of items to be displayed in a widget', 'wc-targetingMantra' ),
+						'name' => __( 'Number of items to be displayed in a widget', 'wc-targetingMantra' ),
+						'desc' => __( 'Enter the number of items to be displayed' ),
 						'type' => 'text',
 						'std'     => '8', // WooCommerce < 2.0
 						'default' => '8', // WooCommerce >= 2.0
