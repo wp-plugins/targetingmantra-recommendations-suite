@@ -64,7 +64,7 @@ Please follow our <a href="https://www.targetingmantra.com/developers.html#wooco
 </p>
 <h3>Pricing (30 days free trial!)</h3>
 <p>
-You can try our suite for 30 days free of cost (no credit card required). </p>
+You can try our suite for 30 days free of cost (no credit card required).For more information about pricing visit our <a href="https://www.targetingmantra.com/woocommerce">pricing page. </a></p>
 
 == Installation ==
 
