@@ -137,15 +137,7 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 		}
 		
 		public function generateWidgetsForShortcode() {
-			$div = $this->insertEmptyDivForShortcode();
-			?>
-			<script type="text/javascript">
-			//<![CDATA[
-			TMJS.init({'mid':<?php echo $this->getMid() ?>,'domain':'na'});
-			TMJS.generateWidgets(<?php echo json_encode($this->_widgetParametersData)?> );
-			//]]>
-			</script>
-			<?php 
+			$div = $this->insertEmptyDivForShortcode(); 
 			return $div;
 		}
 
