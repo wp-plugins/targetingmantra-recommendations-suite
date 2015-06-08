@@ -170,6 +170,47 @@ if( !class_exists('TM_Helper')) {
 		}
 		
 		/**
+		 * get if the product is in stock.
+		 * @return integer
+		 */
+		public function isInStock($product) {
+			$isInstock = $product->is_in_stock();
+			if ($isInstock == "") {
+				$isInstock = 0;
+			}
+			return $isInstock;
+		}
+		
+		/**
+		 * Get the regular price of the product.
+		 * @param object $product
+		 * @return number
+		 */
+		public function get_regularPrice($product) {
+			if($product->product_type == 'variable') {
+				return floatval( $product->get_variation_regular_price());
+			}
+			return floatval( $product->regular_price );
+		}
+		
+		/**
+		 * Get the sale price of the product.If not set,return the regular price.
+		 * @param object $product
+		 * @return number
+		 */
+		public function get_salePrice($product) {
+			if($product->product_type == 'variable') {
+				$price = floatval( $product->get_variation_sale_price() );
+			} else {
+				$price = floatval( $product->sale_price );
+			}
+			if (!$price) {
+				$price = $this->get_regularPrice($product);
+			}
+			return $price;
+		}
+		
+		/**
 		 * get the child catId of current category id
 		 * @return array
 		 */

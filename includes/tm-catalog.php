@@ -54,8 +54,8 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 				'parent_id'         => $this->get_parent($product),
 				'content'           => $postdata->post_content,
 				'title'	            => $product_name,
-				'regular_price' 	=> floatval( $product->regular_price ),
-				'sale_price'		=> $this->get_salePrice($product),
+				'regular_price' 	=> $this->_helper->get_regularPrice($product),
+				'sale_price'		=> $this->_helper->get_salePrice($product),
 				'product_type'      => $product->product_type,
 				'creation_date_gmt' => $postdata->post_date_gmt,
 				'product_cat'		=> $this->get_cat_name( $subCategory ),
@@ -66,7 +66,7 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 				'store'  			=> $store,
 				'sku'               => $product->get_sku(),
 				'url'               => $product->get_permalink(), // product page url
-				'isInStock'         =>  $product->is_in_stock(),
+				'isInStock'         =>  $this->_helper->isInStock($product),
 				'product_image'     => $this->get_product_image( $product ),
 				'average_rating'    =>	$product->get_average_rating( ),
 				'is_virtual'     	=>  $product->is_virtual(),
@@ -94,19 +94,6 @@ if ( ! class_exists( 'Targetingmantra_Catalog' ) ) {
 				'shipping_class_id' =>  $product->get_shipping_class_id( ),
 			);
 			return $product_data;
-		}
-		
-		/**
-		 * Get the sale price of the product.If not set,return the regular price.
-		 * @param object $product
-		 * @return number
-		 */
-		private function get_salePrice($product) {
-			$price = floatval( $product->sale_price );
-			if (!$price) {
-				$price = floatval( $product->regular_price );
-			}
-			return $price;
 		}
 		
 		/**

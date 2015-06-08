@@ -18,9 +18,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	
 	function tm_activation_hook() {
 		update_option( 'woocommerce_tm_install_notice', false );
-		update_option( 'woocommerce_tm_widgets_enable', false );
-		update_option( 'woocommerce_tm_pixel_enable', false );
-		update_option( 'woocommerce_tm_secret_key', '');
 	}
 	register_activation_hook( __FILE__, 'tm_activation_hook' );
 	
@@ -28,10 +25,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	require_once( 'includes/tm-catalog.php' );
 	require_once( 'includes/tm-tracking.php' );
 	require_once( 'includes/tm-widgets.php' );
+	require_once( 'includes/tm-user-data.php' );
 	
 	$helper = new TM_Helper();
 	if($helper->isSecretKeySet()) {
 		new Targetingmantra_Catalog($helper);
+		new Targetingmantra_UserData($helper);
 		if($helper->isPixelIntegrationEnabled()) {
 			new Targetingmantra_Tracking($helper);
 			if ($helper->isWidgetsEnabled()) {

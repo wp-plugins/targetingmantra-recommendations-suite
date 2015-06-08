@@ -113,12 +113,12 @@ if ( ! class_exists( 'Targetingmantra_Tracking' ) ) {
 		private function setProductViewParams(&$trackingParamsData) {
 			$productId = $this->_helper->getProductId();
 			$product = wc_get_product( $productId );
-			$price = $product->regular_price;
-			$specialPrice = $product->sale_price;
+			$price = $this->_helper->get_regularPrice( $product );
+			$specialPrice = $this->_helper->get_salePrice( $product );
 			if($specialPrice) {
 				$price = $specialPrice;
 			}
-			$isInStock = $product->is_in_stock();
+			$isInStock = $this->_helper->isInStock($product);
 			$this->insertParam ( $trackingParamsData,'prc', $price );
 			$this->insertParam ( $trackingParamsData,'stk', $isInStock );
 			$this->insertParam ( $trackingParamsData,'pid', $productId );

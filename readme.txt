@@ -1,5 +1,5 @@
 === TargetingMantra Recommendations Suite for WooCommerce===
-Contributors: sakshiArora
+Contributors: TargetingMantra
 Tags: woocommerce, targetingMantra, recommendation
 Requires at least: 4.1
 Tested up to: 4.1
@@ -60,7 +60,7 @@ Showing relevant products, deals, banners, promotions to customers will help you
 
 <h3> Getting started </h3>
 <p>
-Please follow our  <a href="http://www.targetingmantra.com/docs/woocommerce"> step-by-step guide </a> to install and integrate our recommendations suite. For any assistance, contact us through <a href="mailto:sales@targetingmantra.com">sales@targetingmantra.com </a>
+Please follow our <a href="https://www.targetingmantra.com/developers.html#woocommerce-step1"> step-by-step guide </a> to install and integrate our recommendations suite. For any assistance, contact us through <a href="mailto:sales@targetingmantra.com">sales@targetingmantra.com </a>
 </p>
 <h3>Pricing (30 days free trial!)</h3>
 <p>
@@ -69,6 +69,10 @@ You can try our suite for 30 days free of cost (no credit card required). </p>
 == Installation ==
 
 This extension requires WooCommerce to be installed and activated. It is tested on WooCommerce 2.2.
+
+<p>
+Please follow our <a href="https://www.targetingmantra.com/developers.html#woocommerce-step1"> step-by-step guide </a> to install and integrate our recommendations suite. For any assistance, contact us through <a href="mailto:sales@targetingmantra.com">sales@targetingmantra.com </a>
+</p>
 
 1. Upload the file through 'Plugins -> Add New -> Upload'.
 2. After uploading, activate the plugin through 'Plugins' menu.

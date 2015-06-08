@@ -99,19 +99,24 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 			$pageInfo = $this->getPageInfo();
 			switch ($pageInfo) {
 				case 'homePage' :
-					add_action('woocommerce_before_main_content',array($this, 'generateWidgets'));
+					$this->generateWidgets();
+					add_action(get_option('woocommerce_tm_homepage_widgets'),array($this, 'insertEmptyDiv'));
 					break;
 				case 'categoryPage':
-					add_action('woocommerce_before_main_content',array($this, 'setCategoryWidgetParams'),10);
+					$this->setCategoryWidgetParams();
+					add_action(get_option('woocommerce_tm_category_widgets'),array($this, 'insertEmptyDiv'),90);
 					break;
 				case 'productPage':
-					add_action('woocommerce_sidebar',array($this, 'setProductWidgetParams'),10);
+					$this->setProductWidgetParams();
+					add_action(get_option('woocommerce_tm_product_widgets'),array($this, 'insertEmptyDiv'),90);
 					break;
 				case 'cartPage':
-					add_action('woocommerce_after_cart',array( $this, 'setCartWidgetParams' ));
+					$this->setCartWidgetParams();
+					add_action(get_option('woocommerce_tm_cart_widgets'),array( $this, 'insertEmptyDiv' ));
 					break;
 				case 'thankyouPage':
 					add_action('woocommerce_thankyou', array($this,'setCheckoutWidgetParams'), 10, 1);
+					add_action(get_option('woocommerce_tm_thankyou_widgets'),array( $this, 'insertEmptyDiv' ));
 					break;
 			}
 		}
@@ -120,7 +125,6 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 		 * insert the targetingMantra divs on the page and create call to javascript function to get the widget.
 		 */
 		public function generateWidgets() {
-			$this->insertEmptyDiv();
 			?>
 			<script type="text/javascript">
 			//<![CDATA[
@@ -244,7 +248,7 @@ if (!class_exists( 'Targetingmantra_Widgets' )) {
 		/**
 		 * insert targetingMantra divs based on page type
 		 */
-		private function insertEmptyDiv() {
+		public function insertEmptyDiv() {
 			if ($this->isPageWidgetsEnabled ()) {
 				$widgetsEnabled = $this->getWidgetTypes ();
 				$pageId = $this->getPageId ();
